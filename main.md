@@ -1,9 +1,4 @@
-# 常用的命令
-### 十进制与十六进制互换
-*  使用bc：  
-`echo "obase=16; 34" | bc`
-* 使用printf  
-`printf "%x\n" 34`
+# CENTOS终端常用命令
 ###  查看本机所有IP地址
 `ifconfig -a`
 ### 查找文件中特定内容
@@ -13,6 +8,11 @@
 `find . -name "*.[hc]" | xargs grep -n "abc"` 
 * 查找当前目录下所有.h、.c和.cpp文件内容中是否包含“abc”  
 `find . -name "*.[hc]" -o -name "*.cpp"| xargs grep -n "abc"` 
+### 十进制与十六进制互换
+* 使用bc：  
+`echo "obase=16; 34" | bc`
+* 使用printf  
+`printf "%x\n" 34`
 ### 文件编码相关
 * 查看一个文件(比如a.c)的编码  
 `file a.c`
