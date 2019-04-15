@@ -6,6 +6,13 @@
 `printf "%x\n" 34`
 ###  查看本机所有IP地址
 `ifconfig -a`
+### 查找文件中特定内容
+* 查找当前目录下所有文件内容中是否包含“abc”  
+`find . -type f | xargs grep -n "abc"`
+* 查找当前目录下所有.h、.c文件内容中是否包含“abc”  
+`find . -name "*.[hc]" | xargs grep -n "abc"` 
+* 查找当前目录下所有.h、.c和.cpp文件内容中是否包含“abc”  
+`find . -name "*.[hc]" -o -name "*.cpp"| xargs grep -n "abc"` 
 ### 文件编码相关
 * 查看一个文件(比如a.c)的编码  
 `file a.c`
@@ -25,4 +32,5 @@
 `systemctl start telnet.socket`
 * 启动ftp服务器  
 `systemctl start vsftpd`
+
 
