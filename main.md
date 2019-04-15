@@ -19,4 +19,9 @@
 `systemctl status firewalld`
 * 启动防火墙（需要管理员权限)    
 `systemctl enable firewalld`
+### 系统服务相关
+* 启动telnet服务  
+`systemctl start telnet.socket`
+* 启动ftp服务器  
+`systemctl start vsftpd`
 
