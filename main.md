@@ -6,9 +6,10 @@
 `printf "%x\n" 34`
 ###  查看本机所有IP地址
 `ifconfig -a`
-### 查看一个文件(比如a.c)的编码
+### 文件编码相关
+* 查看一个文件(比如a.c)的编码  
 `file a.c`
-###  把所有.h .c文件由gb2312编码转换为utf8编码
+* 把所有.h .c文件由gb2312编码转换为utf8编码
 `find . -name "*.[hc]" -print0 -exec iconv -f gb2312 -o {}.converted {} \; -exec mv {}.converted {} \;`
 ### 防火墙相关
 * 关闭防火墙（需要管理员权限)  
