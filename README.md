@@ -1,2 +1,2 @@
 # fuc
-Frequent Used Terminal Command on Centos
+Frequent Used Commands on Centos
