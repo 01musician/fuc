@@ -1,6 +1,10 @@
 # CENTOS终端常用命令
 ###  查看本机所有IP地址
 `ifconfig -a`
+### 开机即使能网卡
+`sed -i "s/ONBOOT=no/ONBOOT=yes/" /etc/sysconfig/network-scripts/ifcfg-网卡名`  
+网卡名可以通过`ifconfig -a`命令获得
+
 ### 查找文件中特定内容
 * 查找当前目录下所有文件内容中是否包含“abc”  
 `find . -type f | xargs grep -n "abc"`
