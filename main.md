@@ -44,7 +44,7 @@
 编辑`/etc/yum.repos.d/###-Base.repo`文件，修改`baseurl`字段值，指向Yum源地址
 * 查询Yum源中是否包含某软件安装包(比如ftp)  
 `yum search ftp`
-* 安装软件：查询某软件安装包（ftp）是否存在后，可以通过如下命令安装该软件包  
+* 安装软件：查询某软件安装包（ftp）是否存在后，可以通过如下命令安装该软件包:  
 `yum install -y ftp`
 
 
