@@ -56,7 +56,7 @@
 ### SSH相关
 * 安装ssh客户端  
 `yum install -y ssh`
-* 无密码ssh(scp)登录至主机  
+* 无密码ssh登录(scp拷贝文件)至远程主机  
 假定存在两台主机（A，B），两主机均存在账户user，要从A机无密码ssh登录至B机（或者无密码scp文件至B机）:
   1. 先在A机运行如下命令：  
 `ssh-keygen -t rsa`  
