@@ -57,10 +57,12 @@
 * 安装ssh客户端  
 `yum install -y ssh`
 * 无密码ssh(scp)登录至主机  
-假定存在两台主机（A，B），两主机均存在账户user，要从A机无密码ssh登录至B机（或者无密码scp文件至B机），先在A机运行如下命令：  
+假定存在两台主机（A，B），两主机均存在账户user，要从A机无密码ssh登录至B机（或者无密码scp文件至B机）:
+  1. 先在A机运行如下命令：  
 `ssh-keygen -t rsa`  
-该命令会在A机`/home/user/.ssh`产生`id_rsa`和`id_rsa.pub`两个文件。把`id_rsa.pub`文件中的内容追加至B机`/home/user/.ssh/authorized_keys`文件（若该文件不存在则创建该文件）。  
-在B机使用命令`chmod 600 /home/user/.ssh/authorized_keys`修改文件权限。  
+该命令会在A机`/home/user/.ssh`产生`id_rsa`和`id_rsa.pub`两个文件;
+  2. 把`id_rsa.pub`文件中的内容追加至B机`/home/user/.ssh/authorized_keys`文件（若该文件不存在则创建该文件）;  
+  3. 在B机使用命令`chmod 600 /home/user/.ssh/authorized_keys`修改文件权限。  
 至此，在A机可以无密码登录（无密码scp拷贝文件）至B机
 
 
