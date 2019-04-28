@@ -4,7 +4,14 @@
 ### 开机即使能网卡
 `sed -i "s/ONBOOT=no/ONBOOT=yes/" /etc/sysconfig/network-scripts/ifcfg-网卡名`  
 网卡名可以通过`ifconfig -a`命令获得
-
+### 网络抓包相关  
+* 通过命令行（需要管理员权限)  
+`tcpdump -i 网卡名`  
+网卡名可以通过`ifconfig -a`命令获得
+* 通过图形化界面 （需要管理员权限)  
+先安装图形化抓包工具wireshark  
+`yum install -y wireshark-gnome.x86_64`  
+再在命令终端节目输入`wireshark`启动图形化界面（需要管理员权限）
 ### 查找文件中特定内容
 * 查找当前目录下所有文件内容中是否包含“abc”  
 `find . -type f | xargs grep -n "abc"`
