@@ -12,6 +12,12 @@
 先安装图形化抓包工具wireshark  
 `yum install -y wireshark-gnome.x86_64`  
 再在命令终端节目输入`wireshark`启动图形化界面（需要管理员权限）
+### hostname相关
+* 暂时设置主机名（只对当前终端有效）（需要管理员权限）  
+`hostname XXX` `XXX`表示主机名
+* 永久设置主机名（需要管理员权限）  
+`hostnamectl set-hostname XXX`
+
 ### 查找文件中特定内容
 * 查找当前目录下所有文件内容中是否包含“abc”  
 `find . -type f | xargs grep -n "abc"`
