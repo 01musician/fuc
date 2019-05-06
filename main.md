@@ -18,6 +18,12 @@
 * 永久设置主机名（需要管理员权限）  
 `hostnamectl set-hostname XXX`
 
+### 图形化登录相关
+* 禁止图形化登录（需要管理员权限）  
+`systemctl set-default multi-user.target`
+* 恢复图形化登录（需要管理员权限）  
+`systemctl set-default graphical.target`
+
 ### 查找文件中特定内容
 * 查找当前目录下所有文件内容中是否包含“abc”  
 `find . -type f | xargs grep -n "abc"`
