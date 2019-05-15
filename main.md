@@ -18,6 +18,14 @@
 * 永久设置主机名（需要管理员权限）  
 `hostnamectl set-hostname XXX`
 
+### `tcpdump`相关
+* 抓住某个网卡上某个IP地址的包  
+`tcpdump -i 网卡名 host ip地址`
+* 显示网络包包头和数据区内容    
+`tcpdump -i 网卡名 -xx`
+* 显示网络包包头和指定长度的数据区内容  
+`tcpdump -i 网卡名 -xx -s 长度`
+
 ### 图形化登录相关
 * 禁止图形化登录（需要管理员权限）  
 `systemctl set-default multi-user.target`
