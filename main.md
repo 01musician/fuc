@@ -51,9 +51,9 @@
 * 查看一个文件(比如a.c)的编码  
 `file a.c`
 * 把所有.h .c文件由gb2312编码转换为utf8编码  
-`find . -name "*.[hc]" -print0 -exec iconv -f gb2312 -o {}.converted {} \; -exec mv {}.converted {} \;`
+`find . -name "*.[hc]" -print0 -exec iconv -f gb2312 -t utf8 -o {}.converted {} \; -exec mv {}.converted {} \;`
 * 把当前目录下所有.h, .c, .cpp和makefile文件由gb2312编码转换为utf8编码  
-`find . -name "*.[hc]" -o -name "*.cpp" -o -name "makefile" -print0 -exec iconv -f gb2312 -o {}.converted {} \; -exec mv {}.converted {} \;`
+`find . -name "*.[hc]" -o -name "*.cpp" -o -name "makefile" -print0 -exec iconv -f gb2312 -t utf8 -o {}.converted {} \; -exec mv {}.converted {} \;`
 
 ### 防火墙相关
 * 关闭防火墙（需要管理员权限)  
