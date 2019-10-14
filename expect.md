@@ -13,7 +13,7 @@ A key usage of Expect involves commercial software products. Many of these produ
 
 Every time an Expect operation is completed, the results are stored in a local variable called $expect_out. This allows the script to harvest information to feedback to the user, and it also allows conditional behavior of what to send next based on the circumstances.
 
-## 使用事例
+## 使用示例
 * 自动化telnet
 ```bash
 # Assume $remote_server, $my_user_id, $my_password, and $my_command were read in earlier
@@ -126,7 +126,7 @@ exit 1
 ```
 
 * 自动化ssh登陆
-```bash
+```expect
 #timeout is a predefined variable in expect which by default is set to 10 sec
 #spawn_id is another default variable in expect.
 #It is good practice to close spawn_id handle created by spawn command
