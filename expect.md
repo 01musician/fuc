@@ -126,7 +126,7 @@ exit 1
 ```
 
 * 自动化ssh登陆
-```expect
+```bash
 #timeout is a predefined variable in expect which by default is set to 10 sec
 #spawn_id is another default variable in expect.
 #It is good practice to close spawn_id handle created by spawn command

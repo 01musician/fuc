@@ -8,6 +8,7 @@ Frequent Used Commands on Centos
 * [CentOS升级内核](https://github.com/01musician/fuc/blob/master/upgrade.md)  
 * [MYSQL/MariaDB 相关](https://github.com/01musician/fuc/blob/master/mysql.md)  
 * [GDB相关](https://github.com/01musician/fuc/blob/master/gdb.md) 
+* [Expect相关](https://github.com/01musician/fuc/blob/master/expect.md) 
 
 
 
