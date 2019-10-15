@@ -13,6 +13,6 @@ The three states:
 ## git工作流程
 
 git管理文件的状态变迁
-![logo]:(images/file-lifecycle.png "file status lifecycle")
+![logo](images/file-lifecycle.png "file status lifecycle")
 
 ## 分支（branch）
