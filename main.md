@@ -18,6 +18,11 @@
 * 永久设置主机名（需要管理员权限）  
 `hostnamectl set-hostname XXX`
 
+
+### 读取光盘内容 
+* 先用blkid命令查找/dev目录下对应cdrom的文件，一般为/dev/sr0，再用mount命令把cdrom附载到指定目录（需要管理员权限）
+`mount /dev/sr0 制定目录`
+
 ### `tcpdump`相关
 * 抓住某个网卡上某个IP地址的包  
 `tcpdump -i 网卡名 host ip地址`
