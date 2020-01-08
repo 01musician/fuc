@@ -32,6 +32,27 @@
 `tcpdump -i 网卡名 -xx -s 长度`
 * 把某个网卡加入组播（然后可以在该网卡上捕捉组播包）  
 `ip addr add 组播地址/网络掩码 dev 网卡名 autojoin`
+* 按照任意制定位置过滤包（filter for given bytes on given position）
+> expr relop expr
+>       True if the relation holds, where relop is one of >, <, >=, <=,  =,  !=,  and
+>       expr  is an arithmetic expression composed of integer constants (expressed in
+>       standard C syntax), the normal binary operators [+, -, *, /, &, |, <<, >>], a
+>       length  operator,  and  special packet data accessors.  Note that all compar-
+>       isons are unsigned, so that, for example, 0x80000000 and 0xffffffff are >  0.
+>       To access data inside the packet, use the following syntax:
+>            proto [ expr : size ]
+>       Proto  is  one of ether, fddi, tr, wlan, ppp, slip, link, ip, arp, rarp, tcp,
+>       udp, icmp, ip6 or radio, and indicates the protocol layer for the index oper-
+>       ation.   (ether,  fddi,  wlan,  tr,  ppp, slip and link all refer to the link
+>       layer. radio refers to the "radio header" added  to  some  802.11  captures.)
+>       Note  that  tcp, udp and other upper-layer protocol types only apply to IPv4,
+>       not IPv6 (this will be fixed in the future).  The byte  offset,  relative  to
+>       the  indicated  protocol layer, is given by expr.  Size is optional and indi-
+>       cates the number of bytes in the field of interest; it  can  be  either  one,
+>       two,  or  four,  and  defaults to one.  The length operator, indicated by the
+>       keyword len, gives the length of the packet.
+用这个方法来抓udp包特别合适，因为udp包包头为定长的八个字节，很容易用偏移量来抓包。
+
 
 
 ### 图形化登录相关
@@ -94,8 +115,8 @@
   2. 把`id_rsa.pub`文件中的内容追加至B机`/home/user/.ssh/authorized_keys`文件（若该文件不存在则创建该文件）;  
   3. 在B机使用命令`chmod 600 /home/user/.ssh/authorized_keys`修改文件权限。  
 至此，在A机可以无密码登录（无密码scp拷贝文件）至B机
-
-
+* ssh主机登录慢
+一般为主机开启了
 
 
 
