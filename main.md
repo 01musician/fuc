@@ -33,7 +33,8 @@
 * 把某个网卡加入组播（然后可以在该网卡上捕捉组播包）  
 `ip addr add 组播地址/网络掩码 dev 网卡名 autojoin`
 * 按照任意制定位置过滤包（filter for given bytes on given position）
-> expr relop expr
+> `expr relop expr`
+
 >       True if the relation holds, where relop is one of >, <, >=, <=,  =,  !=,  and
 >       expr  is an arithmetic expression composed of integer constants (expressed in
 >       standard C syntax), the normal binary operators [+, -, *, /, &, |, <<, >>], a
@@ -51,6 +52,7 @@
 >       cates the number of bytes in the field of interest; it  can  be  either  one,
 >       two,  or  four,  and  defaults to one.  The length operator, indicated by the
 >       keyword len, gives the length of the packet.
+
 用这个方法来抓udp包特别合适，因为udp包包头为定长的八个字节，很容易用偏移量来抓包。
 
 
