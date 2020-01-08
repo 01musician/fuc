@@ -25,3 +25,8 @@
     <prefix> { (Move the current pane left)
     <prefix> } (Move the current pane right)
     <prefix> z toggle pane zoom
+
+## <a name="自己常用"></a>自己常用
+
+* 进入命令模式 ```Ctrl+b :```
+
