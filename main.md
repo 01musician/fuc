@@ -99,9 +99,9 @@
 `systemctl start telnet.socket`
 * 启动ftp服务器  
 `systemctl start vsftpd`
-* vsftpd服务器改变默认目录
+* vsftpd服务器改变默认目录  
 在/etc/vsftpd/vsftpd.conf中添加`local_root=/想要的目录`
-* vsftpd服务器不能list目录内容
+* vsftpd服务器不能list目录内容 
 `setsebool -P ftpd_full_access=on`
 
 
