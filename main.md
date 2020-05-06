@@ -53,6 +53,8 @@
 >       keyword len, gives the length of the packet.
 
 用这个方法来抓udp包特别合适，因为udp包包头为定长的八个字节，很容易用偏移量来抓包。
+* tcpdump中抓包时当包的长度比较小时，后面会自动填充0 
+因为ethernet要求最小的包长度为64，在不包括最后4个字节的Frame Check Sequence情况下，发送方会在最后补全字节0.
 
 
 
@@ -73,8 +75,7 @@
 ### 查找并替换文件中特定内容
 * 查找当前目录下所有文件内容中否包含“abc”的文件，并把“abc”替换成“xyz”  
 `find . -type f -print0 | xargs -0 sed -i 's/abc/xyz/g'`
-
-### 十进制与十六进制互换
+## 十进制与十六进制互换
 * 使用bc：  
 `echo "obase=16; 34" | bc`
 * 使用printf  
@@ -131,7 +132,9 @@
 * ssh主机登录慢
 一般为主机开启了
 
-
+### ansible相关
+* 在ansible的输出中显示主机名，而不是ip地址  
+在ansible的主机定义文件中使用格式`hostname ansible_ssh_host=ip`
 
 
 
