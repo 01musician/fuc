@@ -15,5 +15,8 @@ select version();
 my_print_defaults
 ```
 
-## 设置mariadb的主从模式
+## 设置mariadb/mysql的用户权限
+
+* 使用空用户名要注意 
+The user name part of an account name is either a nonblank value that literally matches the user name for incoming connection attempts, or a blank value (empty string) that matches any user name.
 
