@@ -137,4 +137,10 @@
 在ansible的主机定义文件中使用格式`hostname ansible_ssh_host=ip`
 
 
+### vi/vim相关
+* 删除所有空白行
+`:g/^$/d`或`:v/./d`
+
+
+
 
