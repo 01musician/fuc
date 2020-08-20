@@ -71,6 +71,8 @@
 `find . -name "*.[hc]" | xargs grep -n "abc"` 
 * 查找当前目录下所有.h、.c和.cpp文件内容中是否包含“abc”  
 `find . -name "*.[hc]" -o -name "*.cpp"| xargs grep -n "abc"` 
+* 查找当前目录下30分钟前更新的文件
+`find . ! -cmin -30` 
 
 ### 查找并替换文件中特定内容
 * 查找当前目录下所有文件内容中否包含“abc”的文件，并把“abc”替换成“xyz”  
