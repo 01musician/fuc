@@ -1,0 +1,17 @@
+---
+  # Play1 - WebServer related tasks
+  - name: hello world in ansible playbook
+    hosts: hosts
+    tasks:
+      - name: hello world in ansible hosts
+        ping:            
+        data: Hello World
+                  
+  # Play2 - Application Server related tasks
+  - name:  file
+    hosts: hosts 
+    tasks:
+      - name: change a file mode 
+        file:
+          path: ~/file
+          mode: 0666 

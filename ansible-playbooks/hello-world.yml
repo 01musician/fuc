@@ -1,0 +1,7 @@
+---
+  # Play1 - WebServer related tasks
+  - name: hello world in ansible playbook
+    hosts: hosts
+    tasks:
+      - name: hello world in ansible hosts
+        ping:

@@ -1,0 +1,16 @@
+---
+  - name: hello world in ansible playbook
+    hosts: hosts
+    tasks:
+      - name: hello world in ansible hosts
+        ping:            
+        data: Hello World
+                  
+  - name: find max files 
+    hosts: hosts 
+    tasks:
+      - name: find max size files 
+        find:
+          paths: ~/
+          size: 10m
+          recurse: no
