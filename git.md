@@ -15,4 +15,12 @@ The three states:
 git管理文件的状态变迁
 ![logo](images/file-lifecycle.png "file status lifecycle")
 
+
 ## 分支（branch）
+
+
+## 有趣的问题
+
+### 如何用远程分支覆盖本地文件
+```git fetch --all```
+```git reset --hard origin/master```
