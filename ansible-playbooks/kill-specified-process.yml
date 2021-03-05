@@ -1,0 +1,16 @@
+---
+  - name: get running process
+    hosts: hosts
+    vars:
+        processname: firefox
+    tasks: 
+        - name: get running process
+          shell: "ps -ef | grep -v grep | grep -w {{processname}} | awk '{print $2}' "
+          register: running_process
+
+        - debug: var=running_process.stdout_lines
+
+        - name: kill running process
+          shell: "kill {{ item }}"
+          with_items: "{{ running_process.stdout_lines }}"
+   
