@@ -23,9 +23,6 @@
 3. 修改主节点配置文件：`/etc/my.cnf.d/mariadb-server.conf` [mysqld]和[galera]配置如下  
 ```
 [mysqld]
-collation-server=utf8_general_ci
-character-set-server=utf8
-lower_case_table_names=1
 skip_name_resolve=ON
 server_id=160  # server-id每个节点唯一
 
