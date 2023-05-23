@@ -33,7 +33,14 @@ or
 show table status like 'your_table';
 ```
 
-## show innodb status
+## innodb related
+
+### show innodb status
 ```sql
 show engine innodb status
+```
+
+### change innodb_pool_size without restart mariadb
+```sql
+set global innodb_buffer_pool_size = 8G;
 ```
