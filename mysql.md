@@ -44,3 +44,11 @@ show engine innodb status
 ```sql
 set global innodb_buffer_pool_size = 8G;
 ```
+
+## check table's storage engine
+```sql
+SELECT TABLE_NAME, ENGINE
+FROM information_schema.TABLES
+WHERE TABLE_SCHEMA = 'your_database_name'
+AND TABLE_NAME = 'your_view_name';
+```
