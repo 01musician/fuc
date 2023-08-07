@@ -149,5 +149,8 @@ To cut a specific field from a text file or output in Linux terminal using a sem
 `:g/^$/d`或`:v/./d`
 
 
+### Network Related
+* Sending a mulitcast UDP packet does not need gateway 
+I ping a local machine without receiving a reply, but i can receive its multicast traffic. Then i found its gateway does not function well. Sending a multicast packet does not need gateway.
 
 
