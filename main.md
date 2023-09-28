@@ -19,6 +19,11 @@
 `hostnamectl set-hostname XXX`
 
 
+### `cut` related
+To cut a specific field from a text file or output in Linux terminal using a semicolon (;) as the separator, you can use the cut command with the -d (delimiter) option and the -f (fields) option.
+`cut -d ';' -f N <filename>`
+
+
 ### 读取光盘内容 
 * 先用blkid命令查找/dev目录下对应cdrom的文件，一般为/dev/sr0，再用mount命令把cdrom附载到指定目录（需要管理员权限) 
 `mount /dev/sr0 制定目录`
@@ -144,5 +149,8 @@
 `:g/^$/d`或`:v/./d`
 
 
+### Network Related
+* Sending a mulitcast UDP packet does not need gateway 
+I ping a local machine without receiving a reply, but i can receive its multicast traffic. Then i found its gateway does not function well. Sending a multicast packet does not need gateway.
 
 
