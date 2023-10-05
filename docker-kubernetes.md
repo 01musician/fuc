@@ -1,6 +1,7 @@
 # Docker & Kubernetes
 
 ## Docker
+![Image from Subdirectory](images/docker.png)
 ### Docker Network
 #### Docker Network Overview
 
