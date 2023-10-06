@@ -37,12 +37,13 @@ By default all files created inside a container are stored on a writable contain
 Docker has two options for containers to store files on the host machine, so that the files are persisted even after the container stops: volumes, and bind mounts.
 
 
-![docker-volumer](images/docker-types-of-mounts-volume.png)
 
 #### Volumes
 
+![docker-volumer](images/docker-types-of-volume.png)
 #### Bind Mounts
 
+![docker-volumer](images/docker-types-of-bind.png)
 #### Tmpfs mounts
 
 #### Storage Drivers
