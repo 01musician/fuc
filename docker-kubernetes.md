@@ -26,6 +26,28 @@ Docker's networking subsystem is pluggable, using drivers.
 ##### none
 ##### network plugins
 
+### Docker Storage
+
+By default all files created inside a container are stored on a writable container layer. This means that:
+
+* The data doesn't persist when that container no longer exists, and it can be difficult to get the data out of the container if another process needs it.
+* A container's writable layer is tightly coupled to the host machine where the container is running. You can't easily move the data somewhere else.
+* Writing into a container's writable layer requires a storage driver to manage the filesystem. The storage driver provides a union filesystem, using the Linux kernel. This extra abstraction reduces performance as compared to using data volumes, which write directly to the host filesystem.
+
+Docker has two options for containers to store files on the host machine, so that the files are persisted even after the container stops: volumes, and bind mounts.
+
+
+![docker-volumer](images/docker-types-of-mounts-volume.png)
+
+#### Volumes
+
+#### Bind Mounts
+
+#### Tmpfs mounts
+
+#### Storage Drivers
 
 ## Kubernetes
+Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
+
 ![kubernetes-archetecture](images/kubernetes.png)
