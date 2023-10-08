@@ -89,5 +89,32 @@ Kubernetes, also known as K8s, is an open-source system for automating deploymen
 * Secret and configuration management
 
 ### Kubernetes Components
+![componets-kubernetes](images/components-of-kubernetes.svg)
+
+#### Control Plane Componets
+The control plane's components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new pod when a deployment's replicas field is unsatisfied).
+
+##### kube-apiserver
+The API server is a component of the Kubernetes control plane that exposes the Kubernetes API. The API server is the front end for the Kubernetes control plane.
+
+##### etcd
+Consistent and highly-available key value store used as Kubernetes' backing store for all cluster data.
+
+##### kube-scheduler
+Control plane component that watches for newly created Pods with no assigned node, and selects a node for them to run on.
+
+##### kube-controller-manager
+Control plane component that runs controller processes.
+
+##### cloud-controller-manager
+A Kubernetes control plane component that embeds cloud-specific control logic.
+
+#### Node Components
+
+##### kubelet
+An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.
+
+#### kube-proxy
+kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.
 
 
