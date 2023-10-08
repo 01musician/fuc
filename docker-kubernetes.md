@@ -1,6 +1,8 @@
 # Docker & Kubernetes
 
-## Docker
+# Docker
+
+## Docker Engine
 ![Image from Subdirectory](images/docker.png)
 ### Docker Network
 #### Docker Network Overview
@@ -43,10 +45,31 @@ Docker has two options for containers to store files on the host machine, so tha
 ![docker-volumer](images/docker-types-of-volume.png)
 #### Bind Mounts
 
-![docker-volumer](images/docker-types-of-bind.png)
+![docker-bind](images/docker-types-of-bind.png)
+
 #### Tmpfs mounts
 
+
 #### Storage Drivers
+
+
+## Docker Build
+
+![docker-build_engine](images/docker-types-of-bind.png)
+
+### Building Images
+
+#### Dockfile
+There is a dockfile reference
+
+#### Docker Images
+1. packaging your software
+2. build context
+3. multi-stage builds
+4. multi-platform images
+5. enviroment viraables
+6. create your own base image
+
 
 ## Kubernetes
 Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
