@@ -75,3 +75,19 @@ There is a dockfile reference
 Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
 ![kubernetes-archetecture](images/kubernetes.png)
+
+### Why Kubernetes
+
+![contain-envolution](images/container_evolution.svg)
+
+#### Benefits
+* Service discovery and load balancing
+* Storage orchestration
+* Automated rollouts and rollbacks
+* Automatic bin packing
+* Self-healing
+* Secret and configuration management
+
+### Kubernetes Components
+
+
