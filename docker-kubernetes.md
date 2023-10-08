@@ -114,7 +114,29 @@ A Kubernetes control plane component that embeds cloud-specific control logic.
 ##### kubelet
 An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.
 
-#### kube-proxy
+##### kube-proxy
 kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.
 
+##### Contain runtime
+A fundamental component that empowers Kubernetes to run containers effectively. It is responsible for managing the execution and lifecycle of containers within the Kubernetes environment.
+
+#### Addons
+Addons use Kubernetes resources (DaemonSet, Deployment, etc) to implement cluster features. Because these are providing cluster-level features, namespaced resources for addons belong within the kube-system namespace.
+
+1. DNS
+2. Web UI(Dashboard)
+3. Container Resource Monitoring
+4. Cluster-Level Logging
+5. Network Plugins
+
+### Nodes
+Kubernetes runs your workload by placing containers into Pods to run on Nodes. A node may be a virtual or physical machine, depending on the cluster. Each node is managed by the control plane and contains the services necessary to run Pods.
+
+#### Management
+There are two main ways to have Nodes added to the API server:
+
+1. The kubelet on a node self-registers to the control plane
+2. You (or another human user) manually add a Node object
+
+#### Node name uniqueness
 
