@@ -140,3 +140,7 @@ There are two main ways to have Nodes added to the API server:
 
 #### Node name uniqueness
 
+#### Pods 
+![Pods-overview](images/pods_overview.svg)
+
+
