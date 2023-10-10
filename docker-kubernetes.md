@@ -161,3 +161,7 @@ In Kubernetes, controllers are control loops that watch the state of your cluste
 
 ##### Control via API server
 
+#### Pods 
+![Pods-overview](images/pods_overview.svg)
+
+
