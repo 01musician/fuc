@@ -70,6 +70,14 @@ There is a dockfile reference
 5. enviroment viraables
 6. create your own base image
 
+## Docker Compose
+Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the services from your configuration.
+
+### Key features and use cases of Docker Compose
+Using Compose is essentially a three-step process:
+1. Define your app's environment with a Dockerfile so it can be reproduced anywhere.
+2. Define the services that make up your app in a compose.yaml file so they can be run together in an isolated environment.
+3. Run docker compose up and the Docker compose command starts and runs your entire app.
 
 ## Kubernetes
 Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
@@ -114,6 +122,9 @@ A Kubernetes control plane component that embeds cloud-specific control logic.
 ##### kubelet
 An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.
 
+##### kubelet basics
+The common format of a kubectl command is: kubectl action resource.
+
 ##### kube-proxy
 kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.
 
@@ -139,4 +150,14 @@ There are two main ways to have Nodes added to the API server:
 2. You (or another human user) manually add a Node object
 
 #### Node name uniqueness
+
+
+### Controllers
+In robotics and automation, a control loop is a non-terminating loop that regulates the state of a system.
+
+In Kubernetes, controllers are control loops that watch the state of your cluster, then make or request changes where needed. Each controller tries to move the current cluster state closer to the desired state.
+
+#### Controller pattern
+
+##### Control via API server
 
