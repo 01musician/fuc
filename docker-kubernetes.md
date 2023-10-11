@@ -141,6 +141,7 @@ Addons use Kubernetes resources (DaemonSet, Deployment, etc) to implement cluste
 5. Network Plugins
 
 ### Nodes
+![Nodes-overview](images/nodes_overview.svg)
 Kubernetes runs your workload by placing containers into Pods to run on Nodes. A node may be a virtual or physical machine, depending on the cluster. Each node is managed by the control plane and contains the services necessary to run Pods.
 
 #### Management
@@ -164,4 +165,38 @@ In Kubernetes, controllers are control loops that watch the state of your cluste
 #### Pods 
 ![Pods-overview](images/pods_overview.svg)
 
+
+#### Service
+Kubernetes Pods are mortal. Pods have a lifecycle.
+
+A Service in Kubernetes is an abstraction which defines a logical set of Pods and a policy by which to access them. Services enable a loose coupling between dependent Pods. A Service is defined using YAML or JSON, like all Kubernetes object manifests.
+
+Although each Pod has a unique IP address, those IPs are not exposed outside the cluster without a Service.
+
+##### Service and Labels
+A Service routes traffic across a set of Pods. Services are the abstraction that allows pods to die and replicate in Kubernetes without impacting your application. Discovery and routing among dependent Pods (such as the frontend and backend components in an application) are handled by Kubernetes Services.
+
+Services match a set of Pods using labels and selectors, a grouping primitive that allows logical operation on objects in Kubernetes. Labels are key/value pairs attached to objects and can be used in any number of ways:
+
+* Designate objects for development, test, and production
+* Embed version tags
+* Classify an object using tags
+
+
+![Labels-overview](images/labels_overview.svg)
+
+### Performing Action
+#### Create a Cluster
+It's easy to create a cluster using minikuba
+
+#### Deploy an App
+#### Explore your App
+#### Expose your App Publicly
+#### Scale Your App
+#### Update Your App
+
+##### Performing a Rolling Update
+###### Updating an application
+Users expect applications to be available all the time and developers are expected to deploy new versions of them several times a day.
+Rolling updates allow Deployments' update to take place with zero downtime by incrementally updating Pods instances with new ones. The new Pods will be scheduled on Nodes with available resources.Rolling updates allow Deployments' update to take place with zero downtime by incrementally updating Pods instances with new ones. The new Pods will be scheduled on Nodes with available resources.
 
