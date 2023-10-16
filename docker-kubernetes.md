@@ -1,7 +1,28 @@
 # Docker & Kubernetes
 
-# Docker
+# Underline Technology
+## OverlayFS
+In computing, OverlayFS is a union mount filesystem implementation for Linux. It combines multiple different underlying mount points into one, resulting in single directory structure that contains underlying files and sub-directories from all sources.
 
+```bash
+mkdir lowerdir upperdir
+echo "Hello from lowerdir" > lowerdir/file.txt
+echo "Hello from upperdir" > upperdir/file.txt
+sudo mount -t overlay overlay -o lowerdir=lowerdir,upperdir=upperdir,workdir=workdir mergeddir
+cat mergeddir/file.txt
+sudo umount mergeddir
+```
+
+
+## Linux Namespace
+### Mount namespaces
+### UTS namespaces
+### IPC namespaces
+### PID namespaces
+### Network namespaces
+### User namespaces
+ 
+# Docker
 ## Docker Engine
 ![Image from Subdirectory](images/docker.png)
 ### Docker Network
