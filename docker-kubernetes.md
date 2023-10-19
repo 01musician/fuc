@@ -15,6 +15,7 @@ sudo umount mergeddir
 
 
 ## Linux Namespace
+![Linux Namespace Reference](https://lwn.net/Articles/531114)
 ### Mount namespaces
 ### UTS namespaces
 ### IPC namespaces
