@@ -22,6 +22,24 @@ sudo umount mergeddir
 ### PID namespaces
 ### Network namespaces
 ### User namespaces
+
+
+## Container Network Interface
+![Container Network Interface Specification](https://github.com/containernetworking/cni/blob/spec-v1.0.0/SPEC.md)
+
+CNI proposes a generic plugin-based networking solution for application containers on linux.
+* container is a network isolation domain, though the actual isolation technology is not defined by the specification. This could be a network namespace or a virtual machine, for example.
+
+* network refers to a group of endpoints that are uniquely addressable that can communicate amongst each other. This could be either an individual container (as specified above), a machine, or some other network device (e.g. a router). Containers can be conceptually added to or removed from one or more networks.
+* runtime is the program responsible for executing CNI plugins.
+* plugin is a program that applies a specified network configuration.
+
+CNI specification defines:
+1. A format for administrators to define network configuration.
+2. A protocol for container runtimes to make requests to network plugins.
+3. A procedure for executing plugins based on a supplied configuration.
+4. A procedure for plugins to delegate functionality to other plugins.
+5. Data types for plugins to return their results to the runtime.
  
 # Docker
 ## Docker Engine
