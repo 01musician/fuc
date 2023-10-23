@@ -23,6 +23,24 @@ sudo umount mergeddir
 ### Network namespaces
 ### User namespaces
 
+## Open Container Initiative Runtime Specification
+The Open Container Initiative Runtime Specification aims to specify the configuration, execution environment, and lifecycle of a container.
+
+A container's configuration is specified as the config.json for the supported platforms and details the fields that enable the creation of a container. The execution environment is specified to ensure that applications running inside a container have a consistent environment between runtimes along with common actions defined for the container's lifecycle.
+
+### Container Principles
+Define a unit of software delivery called a standard container.
+The specification for Standard container defines:
+1. configuration file formats;
+2. a set of standard operations;
+3. an execution environment.
+
+The 5 principles of Standard Containers are:
+1. Standard operations
+2. Content-agnostic
+3. Infrastructure-agnostic
+4. Designed for automation
+5. Industrial-grade delivery
 
 ## Container Network Interface
 ![Container Network Interface Specification](https://github.com/containernetworking/cni/blob/spec-v1.0.0/SPEC.md)
