@@ -172,6 +172,16 @@ Using Compose is essentially a three-step process:
 2. Define the services that make up your app in a compose.yaml file so they can be run together in an isolated environment.
 3. Run docker compose up and the Docker compose command starts and runs your entire app.
 
+
+### Docker Related questions
+
+#### What a docker contains
+For the newcomers learning the containerization through hands-on experimentation, this may lead to a false impression that containers are somewhat indistinguishable from full-fledged operating systems and that they are always based on well-known and wide-spread Linux distributions like debian, centos, or alpine.
+
+At the same time, approaching the containerization topic from the theoretical side (1, 2, 3) may lead to a rather opposite impression that containers (unlike the traditional virtual machines) are supposed to pack only the application (i.e. your code) and its dependencies (i.e. some libraries) instead of a trying to ship a full operating system.
+
+As it usually happens, the truth lies somewhere in between both statements. From the implementation standpoint, a container is indeed just a process (or a bunch of processes) running on the Linux host. The container process is isolated (namespaces) from the rest of the system and restricted from both the resource consumption (cgroups) and security (capabilities, AppArmor, Seccomp) standpoints. But in the end, this is still a regular process, same as any other process on the host system.
+
 ## Kubernetes
 Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
