@@ -15,6 +15,8 @@ The three states:
 git管理文件的状态变迁
 ![logo](images/file-lifecycle.png "file status lifecycle")
 
+### different place in git
+![git-workflow](images/git-workflow.jpeg "git workflow")
 
 ## 分支（branch）
 
