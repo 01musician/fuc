@@ -64,9 +64,11 @@ To cut a specific field from a text file or output in Linux terminal using a sem
 
 
 ### 图形化登录相关
-* 禁止图形化登录（需要管理员权限）  
+* 获取当前默认登录方式
+`systemctl get-default`
+* 禁止图形化登录（需要管理员权限,重启后生效）  
 `systemctl set-default multi-user.target`
-* 恢复图形化登录（需要管理员权限）  
+* 恢复图形化登录（需要管理员权限,重启后生效）  
 `systemctl set-default graphical.target`
 
 ### 查找文件中特定内容
