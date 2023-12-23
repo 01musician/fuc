@@ -84,6 +84,10 @@ To cut a specific field from a text file or output in Linux terminal using a sem
 ### 查找并替换文件中特定内容
 * 查找当前目录下所有文件内容中否包含“abc”的文件，并把“abc”替换成“xyz”  
 `find . -type f -print0 | xargs -0 sed -i 's/abc/xyz/g'`
+
+### rename a serise of file whose name contain pattern "a" to name containing pattern "b"
+`find . -type f -name "*a*" -exec bash -c 'mv "$1" "${1//a/b}"' _ {} \;`
+
 ## 十进制与十六进制互换
 * 使用bc：  
 `echo "obase=16; 34" | bc`
