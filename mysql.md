@@ -15,6 +15,13 @@ select version();
 my_print_defaults
 ```
 
+## Frequently use sql
+* get distinct value number in a column
+```sql
+select count(distinct column_name) as distinct_count from table_name;
+```
+
+
 ## 设置mariadb/mysql的用户权限
 
 * 使用空用户名要注意 
