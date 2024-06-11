@@ -23,6 +23,8 @@
 To cut a specific field from a text file or output in Linux terminal using a semicolon (;) as the separator, you can use the cut command with the -d (delimiter) option and the -f (fields) option.
 `cut -d ';' -f N <filename>`
 
+### `split` and `cat` related
+If you have a big file, you can split it using `split`, then you can merge it using `cat` with redirection, and finally check the identity using `md5sum`.
 
 ### 读取光盘内容 
 * 先用blkid命令查找/dev目录下对应cdrom的文件，一般为/dev/sr0，再用mount命令把cdrom附载到指定目录（需要管理员权限) 
