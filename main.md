@@ -63,6 +63,15 @@ If you have a big file, you can split it using `split`, then you can merge it us
 * tcpdump中抓包时当包的长度比较小时，后面会自动填充0 
 因为ethernet要求最小的包长度为64，在不包括最后4个字节的Frame Check Sequence情况下，发送方会在最后补全字节0.
 
+### tc related
+* select a udp multicast packet whose specific offset is a specific value and change its to another value
+ `tc qdisc del dev ens33 root`
+ `tc filter add dev ens33 protocol ip parent 1:0 prio 1 u32     match ip protocol 17 0xff     match ip dst 225.8.8.8     match u8 0x6e 0xff at 31     action pedit ex munge offset 31 u8 set 0x61`
+
+clean setting:
+ `tc qdisc del dev ens33 root`
+
+
 
 
 ### 图形化登录相关
