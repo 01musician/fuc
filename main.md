@@ -65,13 +65,16 @@ If you have a big file, you can split it using `split`, then you can merge it us
 
 ### tc related
 * select a udp multicast packet whose specific offset is a specific value and change its to another value 
+
 `tc qdisc del dev ens33 root` 
+
 `tc filter add dev ens33 protocol ip parent 1:0 prio 1 u32     match ip protocol 17 0xff     match ip dst 225.8.8.8     match u8 0x6e 0xff at 31     action pedit ex munge offset 31 u8 set 0x61`
 
 clean setting:
 
  `tc qdisc del dev ens33 root`
 
+### socat related
 
 
 ### 图形化登录相关
