@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小棒分发模拟器 - 三位数终极版</title>
+    <style>
+        /* 全局流线布局 */
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .app-container { width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; box-sizing: border-box; }
+        
+        /* 控制台 */
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        input { width: 65px; padding: 8px; text-align: center; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
+        button { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background-color: #4CAF50; color: white; transition: background 0.2s;}
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        button#nextBtn { background-color: #2196F3; font-size: 15px; }
+
+        /* 顶部待分发区 */
+        .pool-zone { background-color: #e3f2fd; padding: 15px; border-radius: 8px; min-height: 120px; margin-bottom: 20px; }
+        .zone-title { font-size: 14px; font-weight: bold; color: #1565c0; margin-bottom: 10px; border-bottom: 1px solid #90caf9; padding-bottom: 5px; }
+        
+        /* 盒子排列区与内部三层架构 */
+        .boxes-zone { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .box { border: 2px solid #9e9e9e; border-radius: 8px; padding: 10px; background-color: #fafafa; position: relative; }
+        .box-label { position: absolute; top: -12px; left: -10px; background: #607d8b; color: white; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 13px; font-weight: bold; z-index: 2;}
+        
+        /* 盒内三层物理隔离：无虚线，靠间距区分 */
+        .box-row-100 { min-height: 40px; margin-bottom: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+        .box-row-10  { min-height: 40px; margin-bottom: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+        .box-row-1   { min-height: 14px; display: flex; gap: 4px; flex-wrap: wrap; }
+
+        /* 警戒线与余数区 */
+        .warning-line { border-top: 3px dashed #f44336; margin: 30px 0; position: relative; text-align: center; }
+        .warning-line::after { content: '⬇️ 警戒线：进不去的余数 ⬇️'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; color: #f44336; font-size: 12px; font-weight: bold; }
+        .remainder-zone { background-color: #fff9c4; border: 2px solid #fbc02d; padding: 15px; border-radius: 8px; min-height: 60px; margin-bottom: 20px;}
+        
+        /* 结果显示区 */
+        .result-formula { text-align: center; font-size: 28px; font-weight: bold; color: #d32f2f; min-height: 40px; }
+
+        /* 视觉元素定义 (多斯块 Base-10) */
+        .item-container { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
+        
+        /* 大正方形 (百位 100) */
+        .hundred-block { width: 36px; height: 36px; background-color: #8bc34a; border: 1px solid #558b2f; border-radius: 3px; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        
+        /* 长条 (十位 10) */
+        .ten-bar { width: 10px; height: 36px; background-color: #ffb300; border: 1px solid #ff6f00; border-radius: 2px; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        
+        /* 小方格 (个位 1) */
+        .one-cube { width: 10px; height: 10px; background-color: #29b6f6; border: 1px solid #0277bd; border-radius: 2px; box-shadow: 1px 1px 1px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="controls">
+        <input type="number" id="dividend" placeholder="总数" min="1" max="999" value="345">
+        <span style="line-height: 36px; font-weight: bold;">÷</span>
+        <input type="number" id="divisor" placeholder="组数" min="1" max="10" value="3">
+        <button id="initBtn" onclick="initSystem()">生成方块</button>
+        <button id="nextBtn" onclick="nextStep()" disabled>下一步</button>
+    </div>
+
+    <div class="pool-zone">
+        <div class="zone-title" id="pool-title">待分发区 (初始值)</div>
+        <div class="item-container" id="pool-items"></div>
+    </div>
+
+    <div class="boxes-zone" id="boxes-container"></div>
+
+    <div class="warning-line"></div>
+
+    <div class="remainder-zone">
+        <div class="zone-title" style="color: #f57f17; border-bottom-color: #fff59d;">余数专属区 (小格)</div>
+        <div class="item-container" id="remainder-items"></div>
+    </div>
+
+    <div class="result-formula" id="result-text"></div>
+</div>
+
+<script>
+    // 三层状态机
+    let state = {
+        step: 0,
+        hundreds: 0,
+        tens: 0,
+        ones: 0,
+        divisor: 1,
+        boxes: []
+    };
+
+    function updateBtn(text) {
+        document.getElementById('nextBtn').innerText = text;
+    }
+
+    function initSystem() {
+        const dividend = parseInt(document.getElementById('dividend').value);
+        state.divisor = parseInt(document.getElementById('divisor').value);
+        
+        if (!dividend || !state.divisor || dividend < 1 || dividend > 999 || state.divisor < 1) {
+            alert("请输入有效数字 (被除数1-999，除数1-10)"); return;
+        }
+
+        // 数位解析分离
+        state.hundreds = Math.floor(dividend / 100);
+        state.tens = Math.floor((dividend % 100) / 10);
+        state.ones = dividend % 10;
+        
+        state.step = 1;
+        state.boxes = Array.from({length: state.divisor}, () => ({h: 0, t: 0, o: 0}));
+
+        document.getElementById('pool-title').innerText = `待分发区：共 ${dividend} (${state.hundreds}大块, ${state.tens}长条, ${state.ones}小格)`;
+        renderPool();
+        renderBoxes();
+        document.getElementById('remainder-items').innerHTML = '';
+        document.getElementById('result-text').innerText = '';
+        
+        document.getElementById('nextBtn').disabled = false;
+        // 智能跳步判断：如果没有百位，直接提示分发十位
+        if (state.hundreds > 0) updateBtn("下一步 (分发百位大块)");
+        else if (state.tens > 0) { state.step = 3; updateBtn("下一步 (分发十位长条)"); }
+        else { state.step = 5; updateBtn("下一步 (分发个位小格)"); }
+    }
+
+    function nextStep() {
+        const btn = document.getElementById('nextBtn');
+        
+        if (state.step === 1) { // 阶段1：分发百位
+            let hPerBox = Math.floor(state.hundreds / state.divisor);
+            if (hPerBox > 0) {
+                state.hundreds -= hPerBox * state.divisor;
+                state.boxes.forEach(box => box.h += hPerBox);
+            }
+            if (state.hundreds > 0) {
+                state.step = 2; updateBtn("下一步 (拆解剩下的百位)");
+            } else {
+                state.step = 3; updateBtn("下一步 (分发十位长条)");
+            }
+
+        } else if (state.step === 2) { // 阶段2：拆解百位为十位
+            state.tens += state.hundreds * 10;
+            state.hundreds = 0;
+            state.step = 3; updateBtn("下一步 (分发十位长条)");
+
+        } else if (state.step === 3) { // 阶段3：分发十位
+            let tPerBox = Math.floor(state.tens / state.divisor);
+            if (tPerBox > 0) {
+                state.tens -= tPerBox * state.divisor;
+                state.boxes.forEach(box => box.t += tPerBox);
+            }
+            if (state.tens > 0) {
+                state.step = 4; updateBtn("下一步 (拆解剩下的十位)");
+            } else {
+                state.step = 5; updateBtn("下一步 (分发个位小格)");
+            }
+
+        } else if (state.step === 4) { // 阶段4：拆解十位为个位
+            state.ones += state.tens * 10;
+            state.tens = 0;
+            state.step = 5; updateBtn("下一步 (分发个位小格)");
+
+        } else if (state.step === 5) { // 阶段5：分发个位
+            let oPerBox = Math.floor(state.ones / state.divisor);
+            if (oPerBox > 0) {
+                state.ones -= oPerBox * state.divisor;
+                state.boxes.forEach(box => box.o += oPerBox);
+            }
+            state.step = 6; updateBtn("下一步 (余数掉落)");
+
+        } else if (state.step === 6) { // 阶段6：落余数并结算
+            renderRemainder(state.ones);
+            state.ones = 0;
+            
+            const dividend = document.getElementById('dividend').value;
+            const quotient = state.boxes[0].h * 100 + state.boxes[0].t * 10 + state.boxes[0].o;
+            const remainder = document.getElementById('remainder-items').children.length;
+            document.getElementById('result-text').innerText = `${dividend} ÷ ${state.divisor} = ${quotient} ... ${remainder}`;
+            
+            state.step = 7;
+            btn.disabled = true;
+            updateBtn("分发结束");
+        }
+        
+        renderPool(); 
+        renderBoxes();
+    }
+
+    // 独立渲染层
+    function renderPool() {
+        const pool = document.getElementById('pool-items');
+        pool.innerHTML = '';
+        for(let i=0; i<state.hundreds; i++) pool.innerHTML += '<div class="hundred-block"></div>';
+        for(let i=0; i<state.tens; i++) pool.innerHTML += '<div class="ten-bar"></div>';
+        for(let i=0; i<state.ones; i++) pool.innerHTML += '<div class="one-cube"></div>';
+    }
+
+    function renderBoxes() {
+        const container = document.getElementById('boxes-container');
+        container.innerHTML = '';
+        state.boxes.forEach((box, index) => {
+            let hHTML = '', tHTML = '', oHTML = '';
+            for(let i=0; i<box.h; i++) hHTML += '<div class="hundred-block"></div>';
+            for(let i=0; i<box.t; i++) tHTML += '<div class="ten-bar"></div>';
+            for(let i=0; i<box.o; i++) oHTML += '<div class="one-cube"></div>';
+            
+            container.innerHTML += `
+                <div class="box">
+                    <div class="box-label">${index + 1}</div>
+                    <div class="box-row-100">${hHTML}</div>
+                    <div class="box-row-10">${tHTML}</div>
+                    <div class="box-row-1">${oHTML}</div>
+                </div>
+            `;
+        });
+    }
+
+    function renderRemainder(count) {
+        const remainderZone = document.getElementById('remainder-items');
+        remainderZone.innerHTML = '';
+        for(let i=0; i<count; i++) remainderZone.innerHTML += '<div class="one-cube"></div>';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小棒分发模拟器 - 除法退位版</title>
+    <style>
+        /* 全局与布局：采用竖屏流线设计 */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .app-container { width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; padding: 20px; box-sizing: border-box;}
+        
+        /* 控制台 */
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        input { width: 60px; padding: 8px; text-align: center; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
+        button { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background-color: #4CAF50; color: white; transition: background 0.3s;}
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        button#nextBtn { background-color: #2196F3; }
+
+        /* 顶部待分发区 */
+        .pool-zone { background-color: #e3f2fd; padding: 15px; border-radius: 8px; min-height: 120px; margin-bottom: 20px; }
+        .zone-title { font-size: 14px; font-weight: bold; color: #1565c0; margin-bottom: 10px; border-bottom: 1px solid #90caf9; padding-bottom: 5px; }
+        
+        /* 盒子排列区 */
+        .boxes-zone { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .box { border: 2px solid #81c784; border-radius: 8px; padding: 10px; background-color: #f1f8e9; min-height: 80px; position: relative;}
+        .box-label { position: absolute; top: -10px; left: -10px; background: #4CAF50; color: white; width: 24px; height: 24px; border-radius: 50%; text-align: center; line-height: 24px; font-size: 12px; font-weight: bold;}
+        
+        /* 盒子内部双行隔离：上行放捆，下行放根 */
+        .box-row-10 { min-height: 35px; margin-bottom: 5px; display: flex; gap: 5px; flex-wrap: wrap; }
+        .box-row-1 { min-height: 30px; display: flex; gap: 5px; flex-wrap: wrap; }
+
+        /* 警戒线与余数区 */
+        .warning-line { border-top: 3px dashed #f44336; margin: 30px 0; position: relative; text-align: center; }
+        .warning-line::after { content: '⬇️ 警戒线：进不去的余数 ⬇️'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; color: #f44336; font-size: 12px; font-weight: bold; }
+        .remainder-zone { background-color: #fff9c4; border: 2px solid #fbc02d; padding: 15px; border-radius: 8px; min-height: 80px; margin-bottom: 20px;}
+        
+        /* 算式结果区 */
+        .result-formula { text-align: center; font-size: 28px; font-weight: bold; color: #d32f2f; margin-top: 10px; min-height: 40px; }
+
+        /* 小棒的视觉表现 */
+        .item-container { display: flex; flex-wrap: wrap; gap: 5px; }
+        .bundle { width: 15px; height: 30px; background-color: #ff9800; border-radius: 3px; border: 1px solid #e65100; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); cursor: default; }
+        .single { width: 6px; height: 25px; background-color: #03a9f4; border-radius: 2px; border: 1px solid #01579b; cursor: default; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="controls">
+        <input type="number" id="dividend" placeholder="总数" min="1" max="100" value="52">
+        <span style="line-height: 36px; font-weight: bold;">÷</span>
+        <input type="number" id="divisor" placeholder="盒子数" min="1" max="10" value="4">
+        <button id="initBtn" onclick="initSystem()">生成小棒</button>
+        <button id="nextBtn" onclick="nextStep()" disabled>下一步</button>
+    </div>
+
+    <div class="pool-zone">
+        <div class="zone-title" id="pool-title">待分发区 (初始值)</div>
+        <div class="item-container" id="pool-items"></div>
+    </div>
+
+    <div class="boxes-zone" id="boxes-container"></div>
+
+    <div class="warning-line"></div>
+
+    <div class="remainder-zone">
+        <div class="zone-title" style="color: #f57f17; border-bottom-color: #fff59d;">余数专属区</div>
+        <div class="item-container" id="remainder-items"></div>
+    </div>
+
+    <div class="result-formula" id="result-text"></div>
+</div>
+
+<script>
+    // 系统状态机定义
+    let state = {
+        step: 0, // 0:静止, 1:分捆, 2:拆捆, 3:分根, 4:落余数, 5:结束
+        bundles: 0,
+        singles: 0,
+        divisor: 1,
+        boxes: [] // 记录每个盒子当前有的捆和根
+    };
+
+    // 1. 初始化系统 (点击生成小棒)
+    function initSystem() {
+        const dividend = parseInt(document.getElementById('dividend').value);
+        state.divisor = parseInt(document.getElementById('divisor').value);
+        
+        if (!dividend || !state.divisor || dividend < 1 || state.divisor < 1) {
+            alert("请输入有效数字！"); return;
+        }
+
+        // 数据解析
+        state.bundles = Math.floor(dividend / 10);
+        state.singles = dividend % 10;
+        state.step = 1; // 准备进入第一阶段：分捆
+        state.boxes = Array.from({length: state.divisor}, () => ({bundles: 0, singles: 0}));
+
+        // 渲染UI初始态
+        document.getElementById('pool-title').innerText = `待分发区：共 ${dividend} ( ${state.bundles} 捆, ${state.singles} 根 )`;
+        renderPool();
+        renderBoxes();
+        document.getElementById('remainder-items').innerHTML = '';
+        document.getElementById('result-text').innerText = '';
+        
+        // 激活状态机按钮
+        document.getElementById('nextBtn').disabled = false;
+        document.getElementById('nextBtn').innerText = "下一步 (分发成捆)";
+    }
+
+    // 2. 状态机流转核心逻辑
+    function nextStep() {
+        const btn = document.getElementById('nextBtn');
+        
+        if (state.step === 1) { // 阶段一：分发整捆
+            let bundlesPerBox = Math.floor(state.bundles / state.divisor);
+            if (bundlesPerBox > 0) {
+                state.bundles -= bundlesPerBox * state.divisor;
+                state.boxes.forEach(box => box.bundles += bundlesPerBox);
+                renderPool(); renderBoxes();
+            }
+            
+            if (state.bundles > 0) {
+                state.step = 2;
+                btn.innerText = "下一步 (拆开剩捆)";
+            } else {
+                state.step = 3; // 没有剩下的捆，直接跳去分根
+                btn.innerText = "下一步 (分发单根)";
+            }
+
+        } else if (state.step === 2) { // 阶段二：拆解剩下的捆
+            state.singles += state.bundles * 10;
+            state.bundles = 0; // 捆清零
+            renderPool();
+            state.step = 3;
+            btn.innerText = "下一步 (分发单根)";
+
+        } else if (state.step === 3) { // 阶段三：分发单根
+            let singlesPerBox = Math.floor(state.singles / state.divisor);
+            if (singlesPerBox > 0) {
+                state.singles -= singlesPerBox * state.divisor;
+                state.boxes.forEach(box => box.singles += singlesPerBox);
+                renderPool(); renderBoxes();
+            }
+            state.step = 4;
+            btn.innerText = "下一步 (余数掉落)";
+
+        } else if (state.step === 4) { // 阶段四：余数掉入底区
+            renderRemainder(state.singles);
+            state.singles = 0; // 顶层清零
+            renderPool();
+            
+            // 显示最终算式
+            const dividend = document.getElementById('dividend').value;
+            const quotient = state.boxes[0].bundles * 10 + state.boxes[0].singles;
+            const remainder = document.getElementById('remainder-items').children.length;
+            document.getElementById('result-text').innerText = `${dividend} ÷ ${state.divisor} = ${quotient} ... ${remainder}`;
+            
+            state.step = 5;
+            btn.innerText = "分发结束";
+            btn.disabled = true;
+        }
+    }
+
+    // --- 以下为渲染层解耦函数 ---
+
+    function renderPool() {
+        const pool = document.getElementById('pool-items');
+        pool.innerHTML = '';
+        for(let i=0; i<state.bundles; i++) pool.innerHTML += '<div class="bundle"></div>';
+        for(let i=0; i<state.singles; i++) pool.innerHTML += '<div class="single"></div>';
+    }
+
+    function renderBoxes() {
+        const container = document.getElementById('boxes-container');
+        container.innerHTML = '';
+        state.boxes.forEach((box, index) => {
+            let bundleHTML = '', singleHTML = '';
+            for(let i=0; i<box.bundles; i++) bundleHTML += '<div class="bundle"></div>';
+            for(let i=0; i<box.singles; i++) singleHTML += '<div class="single"></div>';
+            
+            container.innerHTML += `
+                <div class="box">
+                    <div class="box-label">${index + 1}</div>
+                    <div class="box-row-10">${bundleHTML}</div>
+                    <div class="box-row-1">${singleHTML}</div>
+                </div>
+            `;
+        });
+    }
+
+    function renderRemainder(count) {
+        const remainderZone = document.getElementById('remainder-items');
+        remainderZone.innerHTML = '';
+        for(let i=0; i<count; i++) remainderZone.innerHTML += '<div class="single"></div>';
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学基地：教科书级竖式演示</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --accent: #e67e22;
+            --hundreds: #27ae60;
+            --tens: #f1c40f;
+            --ones: #e74c3c;
+            --cell-size: 50px; 
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f0f4f8;
+            display: flex; flex-direction: column; align-items: center; padding: 20px;
+        }
+
+        .container {
+            width: 1150px; background: white; padding: 30px;
+            border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: flex; gap: 15px; justify-content: center; align-items: center;
+            margin-bottom: 25px; padding-bottom: 25px; border-bottom: 2px solid #eee;
+        }
+
+        input { width: 90px; padding: 10px; font-size: 22px; text-align: center; border: 2px solid #ddd; border-radius: 8px; font-family: monospace; }
+        button { padding: 10px 25px; font-size: 18px; cursor: pointer; border: none; border-radius: 8px; font-weight: bold; transition: 0.2s; }
+        .btn-start { background: var(--primary); color: white; }
+        .btn-next { background: var(--accent); color: white; }
+        button:hover { filter: brightness(1.1); }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        .display-area { display: flex; gap: 40px; height: 750px; }
+
+        /* 左侧：教科书级网格竖式区 */
+        .math-panel {
+            flex: 0 0 450px; background: #fff; padding: 30px 20px;
+            border: 2px solid #eee; border-radius: 12px;
+            font-family: 'Consolas', 'Courier New', monospace; font-size: 46px; font-weight: bold;
+        }
+
+        .grid-system {
+            display: grid;
+            grid-template-columns: 70px 30px var(--cell-size) var(--cell-size) var(--cell-size);
+            grid-auto-rows: 48px;
+            align-items: center; justify-items: center;
+        }
+
+        .grid-cell { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+        
+        /* 完美的除法符号样式 */
+        .divisor-area { grid-column: 1; grid-row: 2; justify-content: flex-end; padding-right: 5px; }
+        .divisor-curve { grid-column: 2; grid-row: 2; font-family: 'Microsoft YaHei', sans-serif; font-weight: normal; transform: scaleY(1.3); }
+        .dividend-line { 
+            grid-column: 2 / 6; 
+            grid-row: 2; /* 放在第2行，利用 top-border 形成完美的横线 */
+            border-top: 3px solid #333; 
+            width: 100%; height: 100%; 
+        }
+        
+        /* 减法横线 */
+        .grid-line { 
+            background-color: #333; height: 3px; width: 85%; 
+            align-self: end; justify-self: center; border-radius: 2px;
+            margin-bottom: -3px; 
+        }
+        
+        .q-text { color: var(--primary); }
+        .rem-text { color: #333; }
+
+        /* 下落动画 */
+        .falling { color: var(--accent); animation: fallDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        @keyframes fallDown { 0% { transform: translateY(-100px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        
+        /* 深度下落动画（用于个位跨越多行下落） */
+        .falling-deep { color: var(--accent); animation: fallDeep 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        @keyframes fallDeep { 0% { transform: translateY(-190px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+        /* 右侧：积木区 */
+        .block-panel { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .storage { border: 2px dashed #ddd; padding: 12px; border-radius: 10px; min-height: 80px; position: relative; }
+        .storage::before { content: attr(data-label); position: absolute; top: -12px; left: 10px; background: white; padding: 0 5px; font-size: 14px; color: #999; }
+        
+        .blocks-flex { display: flex; flex-wrap: wrap; gap: 4px; }
+        .b-h { width: 35px; height: 35px; background: var(--hundreds); border: 1px solid #1e8449; border-radius: 3px; }
+        .b-t { width: 8px; height: 35px; background: var(--tens); border: 1px solid #d4ac0d; border-radius: 2px; }
+        .b-o { width: 8px; height: 8px; background: var(--ones); border: 1px solid #c0392b; border-radius: 1px; }
+
+        /* 小伙伴分发区 */
+        .child-zones { display: flex; gap: 8px; margin-top: auto; }
+        .child-box { 
+            flex: 1; min-height: 180px; border: 2px solid var(--primary); 
+            border-radius: 10px; background: #fff; 
+            display: flex; flex-direction: column; align-items: center; padding: 8px;
+            box-shadow: inset 0 0 10px rgba(52, 152, 219, 0.1);
+        }
+        .child-name { font-weight: bold; color: var(--primary); margin-bottom: 8px; font-size: 16px; border-bottom: 1px solid #eee; width: 100%; text-align: center; }
+
+        .hint { position: fixed; bottom: 30px; right: 30px; background: #2c3e50; color: white; padding: 20px; border-radius: 12px; max-width: 320px; font-size: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="controls">
+        <label>被除数：</label><input type="number" id="dividend" value="432">
+        <label>除数：</label><input type="number" id="divisor" value="3" min="1" max="6">
+        <button class="btn-start" onclick="initDemo()">开始 / 重置</button>
+        <button id="nextBtn" class="btn-next" onclick="goNext()" disabled>下一步</button>
+    </div>
+
+    <div class="display-area">
+        <div class="math-panel">
+            <div id="grid" class="grid-system"></div>
+        </div>
+
+        <div class="block-panel">
+            <div class="storage" id="box-h" data-label="待分大方块"><div id="h-cont" class="blocks-flex"></div></div>
+            <div class="storage" id="box-t" data-label="待分长条"><div id="t-cont" class="blocks-flex"></div></div>
+            <div class="storage" id="box-o" data-label="待分小方块"><div id="o-cont" class="blocks-flex"></div></div>
+            
+            <div class="child-zones" id="zones"></div>
+        </div>
+    </div>
+    <div id="hint" class="hint">准备好了吗？</div>
+</div>
+
+<script>
+    const NAMES = ["仁仁", "航航", "天天", "笑笑", "乐乐", "豆豆"];
+    let dVal, sVal, step = 0;
+    let h, t, o;
+    let origH, origT, origO;
+    let hRem, tRem;
+    
+    const grid = document.getElementById('grid');
+    window.onload = initDemo;
+
+    function addCell(row, col, text, extraClass="", id="") {
+        if(text === "" || text === undefined || text === null) return;
+        const div = document.createElement('div');
+        div.className = `grid-cell ${extraClass}`;
+        if(id) div.id = id;
+        div.style.gridRow = row; div.style.gridColumn = col;
+        div.innerText = text;
+        grid.appendChild(div);
+    }
+
+    function addLine(row, startCol, endCol) {
+        const div = document.createElement('div');
+        div.className = "grid-line";
+        div.style.gridRow = row; div.style.gridColumn = `${startCol} / ${endCol + 1}`;
+        grid.appendChild(div);
+    }
+
+    function initDemo() {
+        dVal = parseInt(document.getElementById('dividend').value);
+        sVal = parseInt(document.getElementById('divisor').value);
+        if(isNaN(dVal) || isNaN(sVal) || sVal <= 0 || sVal > 9) {
+            msg("请输入正确的被除数和除数。"); return;
+        }
+
+        step = 0;
+        origH = Math.floor(dVal / 100);
+        origT = Math.floor((dVal % 100) / 10);
+        origO = dVal % 10;
+        h = origH; t = origT; o = origO;
+
+        document.getElementById('box-h').style.display = origH > 0 ? 'block' : 'none';
+        document.getElementById('box-t').style.display = (origH > 0 || origT > 0) ? 'block' : 'none';
+
+        grid.innerHTML = '';
+        
+        // 绘制教科书级的除法符号
+        const divLine = document.createElement('div');
+        divLine.className = "dividend-line";
+        grid.appendChild(divLine); // 横线放在被除数正上方
+        
+        addCell(2, 1, sVal, "divisor-area");
+        addCell(2, 2, ")", "divisor-curve"); // 标准弧线
+
+        if (origH > 0) addCell(2, 3, origH);
+        if (origH > 0 || origT > 0) addCell(2, 4, origT);
+        addCell(2, 5, origO);
+
+        renderBlocks();
+        renderZones();
+        document.getElementById('nextBtn').disabled = false;
+        
+        if (origH > 0) msg("三位数除法开启！先算百位，个位和十位在上面等着。");
+        else if (origT > 0) msg("两位数除法开启！从十位开始算。");
+        else msg("一位数除法开启！");
+    }
+
+    function renderBlocks() {
+        document.getElementById('h-cont').innerHTML = '<div class="b-h"></div>'.repeat(h);
+        document.getElementById('t-cont').innerHTML = '<div class="b-t"></div>'.repeat(t);
+        document.getElementById('o-cont').innerHTML = '<div class="b-o"></div>'.repeat(o);
+    }
+
+    function renderZones() {
+        const z = document.getElementById('zones');
+        z.innerHTML = '';
+        for(let i=0; i<sVal; i++) {
+            z.innerHTML += `
+                <div class="child-box" id="child-${i}">
+                    <div class="child-name">${NAMES[i % NAMES.length]}</div>
+                    <div class="blocks-flex" id="child-storage-${i}"></div>
+                </div>`;
+        }
+    }
+
+    function fillChildStorage(type, count) {
+        for(let i=0; i<sVal; i++) {
+            const container = document.getElementById(`child-storage-${i}`);
+            for(let j=0; j<count; j++) {
+                const b = document.createElement('div');
+                b.className = `b-${type}`;
+                container.appendChild(b);
+            }
+        }
+    }
+
+    function msg(txt) { document.getElementById('hint').innerText = txt; }
+
+    function goNext() {
+        step++;
+        
+        // ================= 3位数除法逻辑 =================
+        if (origH > 0) {
+            if (step === 1) { 
+                let qH = Math.floor(h / sVal);
+                hRem = h % sVal;
+                
+                // 商现在绝对稳稳地坐在那条横线的上面了！
+                if(qH > 0) addCell(1, 3, qH, "q-text");
+                
+                let subH = qH * sVal;
+                if(qH > 0) { 
+                    addCell(3, 3, subH); 
+                    addLine(3, 3, 5);
+                }
+                
+                if(hRem > 0) addCell(4, 3, hRem, "rem-text");
+                
+                fillChildStorage('h', qH);
+                h = hRem; renderBlocks();
+                msg(`第1步：百位除以${sVal}。减完后，个位和十位还稳稳停在原处。`);
+
+            } else if (step === 2) { 
+                addCell(4, 4, origT, "falling"); 
+                
+                t += hRem * 10; h = 0; renderBlocks();
+                msg(`第2步：只落下十位的 ${origT}！与百位余数组合成 ${t}。个位还在上面哦。`);
+
+            } else if (step === 3) { 
+                let qT = Math.floor(t / sVal);
+                tRem = t % sVal;
+                
+                addCell(1, 4, qT, "q-text");
+                let subT = qT * sVal;
+                if(subT > 9) { addCell(5, 3, Math.floor(subT / 10)); addCell(5, 4, subT % 10); } 
+                else { addCell(5, 4, subT); }
+                addLine(5, 3, 5);
+                
+                if(tRem > 0) addCell(6, 4, tRem, "rem-text");
+                
+                fillChildStorage('t', qT);
+                t = tRem; renderBlocks();
+                msg(`第3步：商写在十位上方。长条分发完毕！`);
+
+            } else if (step === 4) { 
+                addCell(6, 5, origO, "falling-deep");
+                
+                o += tRem * 10; t = 0; renderBlocks();
+                msg(`第4步：最后一步啦！个位的 ${origO} 从最上面落下来组成 ${o}。`);
+
+            } else if (step === 5) { 
+                let qO = Math.floor(o / sVal);
+                let remFinal = o % sVal;
+                
+                addCell(1, 5, qO, "q-text");
+                let subO = qO * sVal;
+                if(subO > 9) { addCell(7, 4, Math.floor(subO / 10)); addCell(7, 5, subO % 10); } 
+                else { addCell(7, 5, subO); }
+                addLine(7, 3, 5);
+                addCell(8, 5, remFinal, "rem-text");
+                
+                fillChildStorage('o', qO);
+                o = remFinal; renderBlocks();
+                msg(remFinal === 0 ? "全部分完啦，整除！" : `计算结束，最后的余数是 ${remFinal}。`);
+                document.getElementById('nextBtn').disabled = true;
+            }
+            
+        // ================= 2位数除法逻辑 =================
+        } else if (origT > 0) {
+            if (step === 1) { 
+                let qT = Math.floor(t / sVal);
+                tRem = t % sVal;
+                
+                if (qT > 0) addCell(1, 4, qT, "q-text");
+                let subT = qT * sVal;
+                if (qT > 0) { addCell(3, 4, subT); addLine(3, 4, 5); }
+                if (tRem > 0) addCell(4, 4, tRem, "rem-text");
+                
+                fillChildStorage('t', qT);
+                t = tRem; renderBlocks();
+                
+                if (qT > 0) msg(`第1步：十位除以${sVal}。`);
+                else msg(`第1步：十位不够除以${sVal}，商首位不补0。`);
+
+            } else if (step === 2) { 
+                addCell(4, 5, origO, "falling");
+                o += tRem * 10; t = 0; renderBlocks();
+                msg("第2步：唯一的个位落下来啦！组成新的积木堆。");
+
+            } else if (step === 3) { 
+                const remTCell = document.getElementById('remT-cell');
+                if(remTCell) remTCell.classList.add('pulse');
+                msg(`第3步：开始处理最后的 ${o}。`);
+
+            } else if (step === 4) { 
+                let qO = Math.floor(o / sVal);
+                let remFinal = o % sVal;
+                
+                addCell(1, 5, qO, "q-text");
+                let subO = qO * sVal;
+                if (subO > 9) { addCell(5, 4, Math.floor(subO / 10)); addCell(5, 5, subO % 10); } 
+                else { addCell(5, 5, subO); }
+                addLine(5, 4, 5);
+                addCell(6, 5, remFinal, "rem-text");
+                
+                fillChildStorage('o', qO);
+                o = remFinal; renderBlocks();
+                msg(remFinal === 0 ? "大功告成！全部分完啦！" : `计算结束。最后的余数是 ${remFinal}。`);
+                document.getElementById('nextBtn').disabled = true;
+            }
+        } else {
+            if (step === 1) {
+                let qO = Math.floor(o / sVal); let remFinal = o % sVal;
+                addCell(1, 5, qO, "q-text"); addCell(3, 5, qO * sVal); addLine(3, 5, 5); addCell(4, 5, remFinal, "rem-text");
+                fillChildStorage('o', qO); o = remFinal; renderBlocks();
+                msg(remFinal === 0 ? "大功告成！一次就分完啦！" : `计算结束。余数是 ${remFinal}。`);
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
